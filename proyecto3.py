@@ -1,3 +1,11 @@
+import pygraphviz as pgv
+import sys
+def agregarNodo(nombreA,nombreB):
+	gr.add_edge((nombreA,nombreB))
+	
+def agregarNodoAzul(nombreA,nombreB):
+	gr.add_edge(nombreA,nombreB,color='blue')
+
 def contarcodones(codonestotal,p):
     contador=0
     for i in codonestotal:
@@ -10,7 +18,7 @@ codigog={"GCU":"A","GCC":"A","GCA":"A","GCG":"A","CGU":"R","CGC":"R","CGA":"R","
          "AUU":"I","AUC":"I","AUA":"I","UUA":"L","UUG":"L","CUU":"L","CUC":"L","CUA":"L","CUG":"L",
          "AAA":"K","AAG":"K","AUG":"M","UUU":"F","UUC":"F","CCU":"P","CCC":"P","CCA":"P","CCG":"P",
          "UCU":"S","UCC":"S","UCA":"S","UCG":"S","AGU":"S","AGC":"S","ACU":"T","ACC":"T","ACA":"T","ACG":"T",
-         "UGG":"W","UAU":"Y","UAC":"Y","GUU":"V","GUC":"V","GUA":"V","GUG":"V"}   
+         "UGG":"W","UAU":"Y","UAC":"Y","GUU":"V","GUC":"V","GUA":"V","GUG":"V","UAG":"STOP","UGA":"STOP","UAA":"STOP"}   
 genetica=open(input("Ingrese nombre de secuencia:"))
 geneticalimpia=[]
 nombre=genetica.readlines(1)
@@ -113,3 +121,18 @@ print("Aminoácidos polares positivos:",polarespositivos)
 print("Aminoácidos polares negativos:",polaresnegativos)
 print("Aminoácidos polares sin carga:",polaressincarga)
 print("Aminoácidos apolares:",apolares)
+
+
+gr = pgv.AGraph(rotate='360',bgcolor='white',directed=True)
+gr.graph_attr['label']='Codon y Aminoacido tres letras'
+# se agregan nodos.
+i = 1
+while (i < len(codones)):
+	temp = codones[i-1]
+	agregarNodoAzul(temp,codigog[temp])
+	#agregarNodoAzul(dic[temp],dic2[dic[temp]])
+	agregarNodo(temp,codones[i])
+	i = i + 1
+# Generación de grafo en formato PNG.
+gr.layout(prog='dot')
+gr.draw('codonyAA.png')
